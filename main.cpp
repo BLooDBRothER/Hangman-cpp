@@ -5,28 +5,62 @@
 
 using namespace std;
 
-void loadGame(){
-    Game game("_", false);
+void loadSavedGame()
+{
+    Game game(1);
+    int continueAgain;
+    while (game.startGame())
+    {
+        cout << "[ 0 ] - CONTINUE\n[ 1 ] - EXIT\n\nEnter Your choice:  ";
+        cin >> continueAgain;
+        while (continueAgain != 0 && continueAgain != 1)
+        {
+            cout << "Invalid option Enter Again:  ";
+            cin >> continueAgain;
+        }
+        if(continueAgain == 1){
+            return;
+        }
+        game.resetGame();
+    }
 }
 
-void newGame(){
+void newGame()
+{
     string userName;
     cout << "Enter user Name:  ";
     cin >> userName;
-    // while(checkUserName(userName+".txt")){
-    //     cout << "xxxx USER NAME ALREADY TAKEN XXXX" << endl;
-    //     cout << "Enter user Name:  ";
-    //     cin >> userName;
-    // }
-    Game game(userName, true);
-    game.startGame();
+    while (checkUserName(userName))
+    {
+        cout << "User name already Taken\nEnter Again:  ";
+        cin >> userName;
+    }
+    Game game(userName);
+    int continueAgain;
+    while (game.startGame())
+    {
+        cout << "[ 0 ] - CONTINUE\n[ 1 ] - EXIT\n\nEnter Your choice:  ";
+        cin >> continueAgain;
+        while (continueAgain != 0 && continueAgain != 1)
+        {
+            cout << "Invalid option Enter Again:  ";
+            cin >> continueAgain;
+        }
+        if(continueAgain == 1){
+            return;
+        }
+        game.resetGame();
+    }
+    // game.startGame();
 }
 
-int main(){
+int main()
+{
     int gameOption;
     cout << "Welcome to the Game HANGMAN" << endl;
     printHangmanStatus(0);
-    cout << endl << "[1] - New Game\n[2] - Load Game\nEnter Your choice:  ";
+    cout << endl
+         << "[1] - New Game\n[2] - Load Game\nEnter Your choice:  ";
     cin >> gameOption;
     switch (gameOption)
     {
@@ -34,7 +68,7 @@ int main(){
         newGame();
         break;
     case 2:
-        loadGame();
+        loadSavedGame();
         break;
     default:
         break;
