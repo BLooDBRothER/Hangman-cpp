@@ -2,7 +2,7 @@
 
 using namespace std;
 
-void printStatus(int no)
+void printHangmanStatus(int no)
 {
     switch (no)
     {

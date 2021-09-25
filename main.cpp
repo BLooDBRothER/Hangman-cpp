@@ -13,18 +13,19 @@ void newGame(){
     string userName;
     cout << "Enter user Name:  ";
     cin >> userName;
-    while(checkUserName(userName+".txt")){
-        cout << "xxxx USER NAME ALREADY TAKEN XXXX" << endl;
-        cout << "Enter user Name:  ";
-        cin >> userName;
-    }
+    // while(checkUserName(userName+".txt")){
+    //     cout << "xxxx USER NAME ALREADY TAKEN XXXX" << endl;
+    //     cout << "Enter user Name:  ";
+    //     cin >> userName;
+    // }
     Game game(userName, true);
+    game.startGame();
 }
 
 int main(){
     int gameOption;
     cout << "Welcome to the Game HANGMAN" << endl;
-    printStatus(0);
+    printHangmanStatus(0);
     cout << endl << "[1] - New Game\n[2] - Load Game\nEnter Your choice:  ";
     cin >> gameOption;
     switch (gameOption)
