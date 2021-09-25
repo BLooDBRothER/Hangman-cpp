@@ -57,7 +57,13 @@ class GameData{
             // Load the selected game data
             userName = user[option];
             userFile.open(user[option]+".txt", ios::in | ios::out);
-
+            // Check the data has been cleared
+            string checkEnd;
+            getline(userFile, checkEnd);
+            if(checkEnd == "No Data"){
+                newGame();
+                return;
+            }
             // Get the word
             userFile.seekg(6, ios::beg);
             string seed;
@@ -87,10 +93,16 @@ class GameData{
             userFile.seekg(9, ios::cur);
             string crtGuess;
             getline(userFile, crtGuess);
+            bool pass;
             for(auto i: crtGuess){
+                pass = false;
                 for(int j=0; j<gameWord.size(); j++){
                     if(gameWord[j] == i){
                         encryptedWord[j] = i;
+                        if(!pass){
+                            correctGuess.push_back(i);
+                        }
+                        pass = true;
                     }
                 }
             }
@@ -123,6 +135,12 @@ class GameData{
             userFile << crtGuess << "\n";
             userFile.close();
             cout << "Completed" << endl;
+        }
+
+        void endGame(){
+            userFile.open(userName+".txt", ios::trunc | ios::out);
+            userFile << "No Data\n";
+            userFile.close();
         }
 
         void printStatus(){
@@ -171,6 +189,7 @@ class Game : protected GameData{
         }
 
         bool startGame(){
+            saveGame();
             cout << gameWord << endl;
             string guessInput;
             bool pass;
@@ -203,12 +222,15 @@ class Game : protected GameData{
                 for(int chridx = 0; chridx < gameWord.size(); chridx++){
                     if(guessInput[0] == gameWord[chridx]){
                         encryptedWord[chridx] = guessInput[0];
-                        correctGuess.push_back(guessInput[0]);
+                        if(!pass){
+                            correctGuess.push_back(guessInput[0]);
+                        }
                         pass = true;
                     }
                 }
                 if(encryptedWord == gameWord){
                     printWon();
+                    endGame();
                     return true;
                 }
                 if(!pass){
