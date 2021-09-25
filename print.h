@@ -10,7 +10,7 @@ void printHangmanStatus(int no)
         cout << "o__________________________o" << endl;
         cout << "|              |            " << endl;
         cout << "|              |            " << endl;
-        cout << "|              o            " << endl;
+        cout << "|              0            " << endl;
         cout << "|              |            " << endl;
         cout << "|             /|\\          " << endl;
         cout << "|            / | \\         " << endl;
@@ -23,7 +23,7 @@ void printHangmanStatus(int no)
         cout << "o__________________________o" << endl;
         cout << "|              |            " << endl;
         cout << "|              |            " << endl;
-        cout << "|              o            " << endl;
+        cout << "|              0            " << endl;
         cout << "|              |            " << endl;
         cout << "|             /|\\          " << endl;
         cout << "|            / | \\         " << endl;
@@ -36,7 +36,7 @@ void printHangmanStatus(int no)
         cout << "o__________________________o" << endl;
         cout << "|              |            " << endl;
         cout << "|              |            " << endl;
-        cout << "|              o            " << endl;
+        cout << "|              0            " << endl;
         cout << "|              |            " << endl;
         cout << "|             /|\\          " << endl;
         cout << "|            / | \\         " << endl;
@@ -49,7 +49,7 @@ void printHangmanStatus(int no)
         cout << "o__________________________o" << endl;
         cout << "|              |            " << endl;
         cout << "|              |            " << endl;
-        cout << "|              o            " << endl;
+        cout << "|              0            " << endl;
         cout << "|              |            " << endl;
         cout << "|             /|\\          " << endl;
         cout << "|            / | \\         " << endl;
@@ -62,7 +62,7 @@ void printHangmanStatus(int no)
         cout << "o__________________________o" << endl;
         cout << "|              |            " << endl;
         cout << "|              |            " << endl;
-        cout << "|              o            " << endl;
+        cout << "|              0            " << endl;
         cout << "|              |            " << endl;
         cout << "|             /|\\          " << endl;
         cout << "|              |            " << endl;
@@ -75,7 +75,7 @@ void printHangmanStatus(int no)
         cout << "o__________________________o" << endl;
         cout << "|              |            " << endl;
         cout << "|              |            " << endl;
-        cout << "|              o            " << endl;
+        cout << "|              0            " << endl;
         cout << "|              |            " << endl;
         cout << "|              |            " << endl;
         cout << "|                           " << endl;
@@ -88,7 +88,7 @@ void printHangmanStatus(int no)
         cout << "o__________________________o" << endl;
         cout << "|              |            " << endl;
         cout << "|              |            " << endl;
-        cout << "|              o            " << endl;
+        cout << "|              0            " << endl;
         cout << "|                           " << endl;
         cout << "|                           " << endl;
         cout << "|                           " << endl;

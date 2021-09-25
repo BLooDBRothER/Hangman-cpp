@@ -1,4 +1,7 @@
 .vscode/
 game
 main
-[^words|^userList]*.txt
+fun.txt
+test.txt
+test[0-9a-z].txt
+[^words|^userList|^default]*.txt
