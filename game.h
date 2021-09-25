@@ -62,7 +62,10 @@ class GameData{
 };
 class Game : protected GameData{
     public:
+        string encryptedWord;
         Game(string fileName, bool newGame):GameData(fileName, newGame){
             cout << gameWord;
+            encryptedWord = string(89, '*');
+            cout << gameWord << " " <<  encryptedWord ;
         }
 };
