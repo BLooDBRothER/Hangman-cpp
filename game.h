@@ -1,5 +1,4 @@
 #include <bits/stdc++.h>
-// #include "word.h"
 
 using namespace std;
 
@@ -9,31 +8,35 @@ bool checkUserName(string name){
 }
 class GameData{
     private:
+        int seed;
+        string userName;
         fstream userFile;
         selectWords words;
     public:
         int life;
         string gameWord, encryptedWord;
         vector<char> wrongGuess, correctGuess;
-        GameData(string fileName, bool gameType){
-            if(gameType){
-                updateUserList(fileName);
-                newGame(fileName);
-            }
-            else{
-                loadGame();
-            }
+        GameData(){
+            loadGame();
+        }
+        GameData(string fileName){
+            userName = fileName;
+            updateUserList(fileName);
+            newGame();
         }
 
-        void newGame(string fileName){
-                userFile.open(fileName+".txt", ios::trunc | ios::in | ios::out);
-                int seed = time(0);
+        void newGame(){
+                userFile.open(userName+".txt", ios::trunc | ios::in | ios::out);
+                seed = time(0);
                 userFile << "word: " + to_string(seed);
                 userFile.close();
+                wrongGuess.clear();
+                correctGuess.clear();
                 initGame(words.getWord(seed), 8);
         }
 
         void loadGame(){
+            // Read and Display user List
             fstream file("userList.txt", ios::in);
             vector<string> user;
             string dummy;
@@ -50,18 +53,76 @@ class GameData{
                 cout << "Select the Game to Load:  ";
                 cin >> option;
             }
+
+            // Load the selected game data
+            userName = user[option];
             userFile.open(user[option]+".txt", ios::in | ios::out);
+
+            // Get the word
             userFile.seekg(6, ios::beg);
             string seed;
             getline(userFile, seed);
-            
-            initGame(words.getWord(stoi(seed)), 8);
+            this->seed = stoi(seed);
+
+            // Get the Life
+            userFile.seekg(6, ios::cur);
+            string life;
+            getline(userFile, life);
+
+            // Get the wrong Guess
+            userFile.seekg(7, ios::cur);
+            string wrGuess;
+            getline(userFile, wrGuess);
+            for(auto i: wrGuess){
+                if(i == ' ' || i == '\n'){
+                    continue;
+                }
+                else{
+                    wrongGuess.push_back(i);
+                }
+            }
+            initGame(words.getWord(this->seed), stoi(life));
+
+            // Update Encrypted test
+            userFile.seekg(9, ios::cur);
+            string crtGuess;
+            getline(userFile, crtGuess);
+            for(auto i: crtGuess){
+                for(int j=0; j<gameWord.size(); j++){
+                    if(gameWord[j] == i){
+                        encryptedWord[j] = i;
+                    }
+                }
+            }
+            userFile.close();
         }
 
         void initGame(string gameWord, int life){
+            transform(gameWord.begin(), gameWord.end(), gameWord.begin(), ::tolower);
             this->gameWord = gameWord;
             this->life = life;
             encryptedWord = string(gameWord.size(), '*');
+        }
+
+        void saveGame(){
+            cout << "Saving .......";
+            userFile.open(userName+".txt", ios::trunc | ios::in | ios::out);
+            userFile << "seed: " + to_string(seed) << "\n";
+            userFile << "life: " + to_string(life) << "\n";
+            string wrGuess = "wrong: ";
+            for(auto i : wrongGuess){
+                wrGuess = wrGuess + i + ' ';
+            }
+            cout << wrGuess << endl;
+            userFile << wrGuess << "\n";
+            string crtGuess = "correct: ";
+            for(auto i : correctGuess){
+                crtGuess = crtGuess + i + ' ';
+            }
+            cout << crtGuess << endl;
+            userFile << crtGuess << "\n";
+            userFile.close();
+            cout << "Completed" << endl;
         }
 
         void printStatus(){
@@ -69,14 +130,29 @@ class GameData{
             printHangmanStatus(life-1);
             cout << "Word:  " << encryptedWord << endl;
             printWrongGuess();
-            cout << "Enter the Guessed character [EXIT - TO EXIT THE GAME]:  ";
+            cout << "Life:  " << life-1 << endl;
         }
 
         void printWrongGuess(){
+            cout << "Previously Guessed words:  ";
             for(auto i: wrongGuess){
                 cout << i << " ";
             }
             cout << endl;
+        }
+
+        void printLost(){
+            printStatus();
+            cout << "YOU RAN OUT OF LIFE" << endl;
+            cout << "Word to save him/her from hanging is:  " << gameWord << endl;
+            cout << "Better Luck Next Time" << endl;
+            cout << "____________________________________________________________________" << endl;
+        }
+        void printWon(){
+            printStatus();
+            cout << "Hooray!!!!!!! You saved him/her from hanging" << endl;
+            cout << "You took " << (8 - life) << " chance to save him/her" << endl;
+            cout << "____________________________________________________________________" << endl;
         }
 
         void updateUserList(string name){
@@ -87,24 +163,41 @@ class GameData{
 };
 class Game : protected GameData{
     public:
-        Game(string fileName, bool gameType):GameData(fileName, gameType){
-            cout << gameWord << endl;
+        Game(int load):GameData(){}
+        Game(string fileName):GameData(fileName){}
+
+        void resetGame(){
+            newGame();
         }
 
-        void startGame(){
+        bool startGame(){
+            cout << gameWord << endl;
             string guessInput;
             bool pass;
             while(life!=1){
                 pass = false;
                 printStatus();
+                cout << "Enter the Guessed character [EXIT - TO EXIT THE GAME]:  ";
                 cin >> guessInput;
-                if(guessInput == "exit"){}
-                auto it = find(correctGuess.begin(), correctGuess.end(), guessInput[0]); 
+                while(guessInput.size() > 1){
+                    if(guessInput == "exit"){
+                        return false;
+                    }
+                    cout << "Invalid Input Enter Again:  ";
+                    cin >> guessInput;
+                }
                 while( 
                     (find(correctGuess.begin(), correctGuess.end(), guessInput[0]) != correctGuess.end()) 
                     || (find(wrongGuess.begin(), wrongGuess.end(), guessInput[0]) != wrongGuess.end())
                 ){
                     cout << endl << "This Character You Guessed Already\nEnter Again:  ";
+                    cin >> guessInput;
+                }
+                while(guessInput.size() > 1){
+                    if(guessInput == "exit"){
+                        return false;
+                    }
+                    cout << "Invalid Input Enter Again:  ";
                     cin >> guessInput;
                 }
                 for(int chridx = 0; chridx < gameWord.size(); chridx++){
@@ -115,13 +208,16 @@ class Game : protected GameData{
                     }
                 }
                 if(encryptedWord == gameWord){
-                    cout << "Success";
-                    return;
+                    printWon();
+                    return true;
                 }
                 if(!pass){
                     wrongGuess.push_back(guessInput[0]);
                     life--;
                 }
+                saveGame();
             }
+            printLost();
+            return true;
         }
 };
