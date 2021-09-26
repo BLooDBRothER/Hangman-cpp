@@ -4,6 +4,18 @@
 ## Info
   I Created this game for learning purpose.
   
+## Wanna Try
+  ### Local
+  ```
+    git clone https://github.com/BLooDBRothER/Hangman-cpp.git
+  ```
+  * Get into the directory Hangman-cpp and compile and run
+  ``` bash
+    c++ -o main main.cpp && ./main
+  ```
+  ### Live 
+  @ [REPLIT](https://replit.com/@ArulMurugavelB/Hangman-cpp)
+  
 ## What I used
   * File - fstream for getting word from words file, save and retrieve the user's game data.
   * class and inheritance - to get knowledge in it.
