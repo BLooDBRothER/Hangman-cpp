@@ -1,4 +1,0 @@
-word: 1632569547
-life: 6
-wrong: q e r
-correct: s o b
