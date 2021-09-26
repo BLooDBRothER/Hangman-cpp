@@ -8,17 +8,18 @@ using namespace std;
 void loadSavedGame()
 {
     Game game(1);
-    int continueAgain;
+    string continueAgain;
     while (game.startGame())
     {
-        cout << "[ 0 ] - CONTINUE\n[ 1 ] - EXIT\n\nEnter Your choice:  ";
+        cout << "[0] - CONTINUE\n[1] - EXIT\n\nEnter Your choice:  ";
         cin >> continueAgain;
-        while (continueAgain != 0 && continueAgain != 1)
+        while (continueAgain != "0" && continueAgain != "1")
         {
             cout << "Invalid option Enter Again:  ";
             cin >> continueAgain;
         }
-        if(continueAgain == 1){
+        if (continueAgain == "1")
+        {
             return;
         }
         game.resetGame();
@@ -36,17 +37,18 @@ void newGame()
         cin >> userName;
     }
     Game game(userName);
-    int continueAgain;
+    string continueAgain;
     while (game.startGame())
     {
-        cout << "[ 0 ] - CONTINUE\n[ 1 ] - EXIT\n\nEnter Your choice:  ";
+        cout << "[0] - CONTINUE\n[1] - EXIT\n\nEnter Your choice:  ";
         cin >> continueAgain;
-        while (continueAgain != 0 && continueAgain != 1)
+        while (continueAgain != "0" && continueAgain != "1")
         {
             cout << "Invalid option Enter Again:  ";
             cin >> continueAgain;
         }
-        if(continueAgain == 1){
+        if (continueAgain == "1")
+        {
             return;
         }
         game.resetGame();
@@ -59,18 +61,23 @@ int main()
     int gameOption;
     cout << "Welcome to the Game HANGMAN" << endl;
     printHangmanStatus(0);
-    cout << endl
-         << "[1] - New Game\n[2] - Load Game\nEnter Your choice:  ";
-    cin >> gameOption;
-    switch (gameOption)
+    while (1)
     {
-    case 1:
-        newGame();
-        break;
-    case 2:
-        loadSavedGame();
-        break;
-    default:
-        break;
+        cout << endl
+             << "[0] - New Game\n[1] - Load Game\n[2] - Exit\nEnter Your choice:  ";
+        cin >> gameOption;
+        switch (gameOption)
+        {
+            case 0:
+                newGame();
+                return 0;
+            case 1:
+                loadSavedGame();
+                return 0;
+            case 2:
+                return 0;
+            default:
+                break;
+        }
     }
 }

@@ -7,7 +7,7 @@ class selectWords{
         vector<string> words;
     public:
         selectWords(){
-            fstream wordFile("words.txt");
+            fstream wordFile("./game_data/words.txt");
             string word;
             while(getline(wordFile, word)){
                 words.push_back(word);

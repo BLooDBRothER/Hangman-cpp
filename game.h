@@ -3,8 +3,10 @@
 using namespace std;
 
 bool checkUserName(string name){
-    fstream file(name);
-    return file.is_open() ? true : false;
+    fstream file("./user_data/" + name + ".txt");
+    bool is_open = file.is_open() ? true : false;
+    file.close();
+    return is_open;
 }
 class GameData{
     private:
@@ -26,37 +28,43 @@ class GameData{
         }
 
         void newGame(){
-                userFile.open(userName+".txt", ios::trunc | ios::in | ios::out);
+                userFile.open("./user_data/" + userName + ".txt", ios::trunc | ios::in | ios::out);
                 seed = time(0);
                 userFile << "word: " + to_string(seed);
                 userFile.close();
                 wrongGuess.clear();
                 correctGuess.clear();
                 initGame(words.getWord(seed), 8);
+                saveGame();
         }
 
         void loadGame(){
             // Read and Display user List
-            fstream file("userList.txt", ios::in);
+            fstream file("./game_data/userList.txt", ios::in);
             vector<string> user;
             string dummy;
             for(int i=0; getline(file, dummy); i++){
-                cout << "[ " + to_string(i) + " ] " + dummy << endl;
+                cout << "[" + to_string(i) + "] " + dummy << endl;
                 user.push_back(dummy);
             }
             file.close();
             int option;
             cout << "Select the Game to Load:  ";
             cin >> option;
+            if(cin.fail()){
+                cin.clear();
+                cin.ignore(100, '\n');
+            }
             while(option >= user.size()){
                 cout << "xxxx INVALID CHOICE xxxx\n";
-                cout << "Select the Game to Load:  ";
+                cout << "Select the Game to Load - [By Default 0 is selected]:  ";
                 cin >> option;
             }
 
             // Load the selected game data
             userName = user[option];
-            userFile.open(user[option]+".txt", ios::in | ios::out);
+            userFile.open("./user_data/" + user[option] + ".txt", ios::in | ios::out);
+
             // Check the data has been cleared
             string checkEnd;
             getline(userFile, checkEnd);
@@ -118,27 +126,25 @@ class GameData{
 
         void saveGame(){
             cout << "Saving .......";
-            userFile.open(userName+".txt", ios::trunc | ios::in | ios::out);
-            userFile << "seed: " + to_string(seed) << "\n";
+            userFile.open("./user_data/" + userName + ".txt", ios::trunc | ios::in | ios::out);
+            userFile << "word: " + to_string(seed) << "\n";
             userFile << "life: " + to_string(life) << "\n";
             string wrGuess = "wrong: ";
             for(auto i : wrongGuess){
                 wrGuess = wrGuess + i + ' ';
             }
-            cout << wrGuess << endl;
             userFile << wrGuess << "\n";
             string crtGuess = "correct: ";
             for(auto i : correctGuess){
                 crtGuess = crtGuess + i + ' ';
             }
-            cout << crtGuess << endl;
             userFile << crtGuess << "\n";
             userFile.close();
-            cout << "Completed" << endl;
+            cout << " Completed" << endl;
         }
 
         void endGame(){
-            userFile.open(userName+".txt", ios::trunc | ios::out);
+            userFile.open("./user_data/" + userName + ".txt", ios::trunc | ios::out);
             userFile << "No Data\n";
             userFile.close();
         }
@@ -174,7 +180,7 @@ class GameData{
         }
 
         void updateUserList(string name){
-            fstream file("userList.txt", ios::app);
+            fstream file("./game_data/userList.txt", ios::app);
             file << name << "\n";
             file.close();
         }
@@ -189,8 +195,6 @@ class Game : protected GameData{
         }
 
         bool startGame(){
-            saveGame();
-            cout << gameWord << endl;
             string guessInput;
             bool pass;
             while(life!=1){
@@ -240,6 +244,7 @@ class Game : protected GameData{
                 saveGame();
             }
             printLost();
+            endGame();
             return true;
         }
 };

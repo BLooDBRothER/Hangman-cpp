@@ -4,4 +4,5 @@ main
 fun.txt
 test.txt
 test[0-9a-z].txt
-[^words|^userList|^default]*.txt
+[^words|^userList]*.txt
+user_data/[^default]*.txt
