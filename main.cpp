@@ -58,7 +58,7 @@ void newGame()
 
 int main()
 {
-    int gameOption;
+    char gameOption;
     cout << "Welcome to the Game HANGMAN" << endl;
     printHangmanStatus(0);
     while (1)
@@ -68,16 +68,17 @@ int main()
         cin >> gameOption;
         switch (gameOption)
         {
-            case 0:
+            case '0':
                 newGame();
-                return 0;
-            case 1:
+                break;
+            case '1':
                 loadSavedGame();
-                return 0;
-            case 2:
-                return 0;
+                break;
+            case '2':
+                break;
             default:
                 break;
         }
+        break;
     }
 }
